@@ -117,12 +117,12 @@ def phone_wallpaper_sender(message):
         bot.send_photo(cid, photo.portrait)
 
 
-@bot.message_handler(regexp=r'Movie info')
-@bot.message_handler(regexp=r'movie info')
+@bot.message_handler(regexp=r'filmbilgi')
+@bot.message_handler(regexp=r'film')
 # This function handles movie info command and gets the info of the movie.
 def movies_info(message):
     cid = message.chat.id
-    movie = bot.send_message(cid, "Enter the movie name")
+    movie = bot.send_message(cid, "Bir Film Adı gir")
     # passing movie name to movie_sender ().
     bot.register_next_step_handler(movie, movie_sender)
 
@@ -165,24 +165,20 @@ def movie_sender(message):
         except IndexError:
             break
     if movie_info[0]["poster_path"] is None:
-        bot.send_message(cid, "Poster not available")
+        bot.send_message(cid, "Bilgi Bulamadım..")
     else:
-        bot.send_photo(cid, f'https://image.tmdb.org/t/p/w500{movie_info[0]["poster_path"]}')
-    if video_key is None:
-        bot.send_message(cid, "Trailer not available")
-    else:
-        bot.send_message(cid, f'Trailer\nhttps://www.youtube.com/watch?v={video_key}')
-    bot.send_message(cid, f'Title : {movie_info[0]["title"]}\n\nRelease date : {movie_info[0]["release_date"]}\n\nCast : {", ".join(actors)}\n\nGenre : {", ".join(genres)}\n\nRatings : {movie_info[0]["vote_average"]}\n\nOverview : {movie_info[0]["overview"]}')
-
+        bot.send_photo(chat_id=cid, 
+                       photo=f'https://image.tmdb.org/t/p/w500{movie_info[0]["poster_path"]}',
+                       caption=f'Başlık: {movie_info[0]["title"]}\n\nYayınlanma Tarihi: {movie_info[0]["release_date"]}\n\nOyuncular : {", ".join(actors)}\n\nTürler : {", ".join(genres)}\n\nPuan : {movie_info[0]["vote_average"]}\n\nKonu : {movie_info[0]["overview"]}')
 
 @bot.message_handler(regexp=r'Tv series info')
 @bot.message_handler(regexp=r'TV series info')
-@bot.message_handler(regexp=r'Tvseries info')
-@bot.message_handler(regexp=r'tvseries info')
+@bot.message_handler(regexp=r'dizibilgi')
+@bot.message_handler(regexp=r'dizi')
 # This function handles tvseries info command and gets the info of the tvseries.
 def tv_series_info(message):
     cid = message.chat.id
-    tv = bot.send_message(cid, "Enter the TV series name")
+    tv = bot.send_message(cid, "Bir Dizi İsmi Gir..")
     # passing tvseries name to tvseries_sender ().
     bot.register_next_step_handler(tv, tvseries_sender)
 
@@ -197,7 +193,7 @@ def tvseries_sender(message):
         tv_series_info(message)
         return
     if not tvseries_info:
-        bot.send_message(cid, "No such TV series\nEnter the name properly")
+        bot.send_message(cid, "Bu İsimde Dizi Bulamadım")
         tv_series_info(message)
         return
     details = tvseries.details(tvseries_info[0]['id'])
@@ -227,13 +223,9 @@ def tvseries_sender(message):
     if tvseries_info[0]["poster_path"] is None:
         bot.send_message(cid, "Poster not available")
     else:
-        bot.send_photo(cid, f'https://image.tmdb.org/t/p/w500{tvseries_info[0]["poster_path"]}')
-    if video_key is None:
-        bot.send_message(cid, "Trailer not available")
-    else:
-        bot.send_message(cid, f'Trailer\nhttps://www.youtube.com/watch?v={video_key}')
-    bot.send_message(cid, f'Title : {tvseries_info[0]["name"]}\n\nRelease date : {tvseries_info[0]["first_air_date"]}\n\nCast : {", ".join(actors)}\n\nGenre : {", ".join(genres)}\n\nRatings : {tvseries_info[0]["vote_average"]}\n\nNumber of seasons : {details["number_of_seasons"]}\n\nNumber of episodes : {details["number_of_episodes"]}\n\nOverview : {tvseries_info[0]["overview"]}')
-
+        bot.send_photo(chat_id=cid, 
+                       photo=f'https://image.tmdb.org/t/p/w500{movie_info[0]["poster_path"]}',
+                       caption=f'Başlık: {movie_info[0]["title"]}\n\nYayınlanma Tarihi: {movie_info[0]["release_date"]}\n\nOyuncular : {", ".join(actors)}\n\nTürler : {", ".join(genres)}\n\nPuan : {movie_info[0]["vote_average"]}\n\nKonu : {movie_info[0]["overview"]}')
 
 @bot.message_handler(regexp=r'movie recommendations')
 @bot.message_handler(regexp=r'Movie recommendations')
